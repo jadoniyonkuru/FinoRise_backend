@@ -1,13 +1,12 @@
 {
   "name": "finorise_backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/app.ts",
-  "type": "module",
+  "description": "A backend service for the FinoRise financial platform.",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/app.ts",
-    "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"No tests yet\""
   },
   "repository": {
     "type": "git",
@@ -21,18 +20,18 @@
   },
   "homepage": "https://github.com/jadoniyonkuru/FinoRise_backend#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
-    "pg": "^8.21.0"
+    "joi": "^18.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.21.0",
+    "sequelize": "^6.37.8",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.9.1",
-    "@types/pg": "^8.20.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "nodemon": "^3.1.14"
   }
 }
