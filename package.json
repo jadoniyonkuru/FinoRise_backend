@@ -1,8 +1,8 @@
 {
-  "name": "finorise_project",
+  "name": "finorise_backend",
   "version": "1.0.0",
   "description": "A backend service for the FinoRise financial platform.",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
