@@ -5,6 +5,7 @@ const helmet = require('helmet');
 
 const authRoutes = require('./modules/auth/auth.routes');
 const gamificationRoutes = require('./modules/gamification/gamification.routes');
+const adminRoutes = require('./modules/admin/admin.routes');
 
 const app = express();
 
@@ -19,5 +20,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', authRoutes);
 app.use('/api/gamification', gamificationRoutes);
+app.use('/api/modules', require('./modules/learning/module.routes'));
+app.use('/api/admin', adminRoutes);
 
 module.exports = app;
