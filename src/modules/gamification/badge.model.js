@@ -28,13 +28,11 @@ const Badge = sequelize.define('Badge', {
     type: DataTypes.STRING(100),
     allowNull: true,
   },
-  earned_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
 }, {
   tableName: 'badges',
-  timestamps: false,
+  timestamps: true,          
+  createdAt: 'earned_at',  
+  updatedAt: false,          
 });
 
 User.hasMany(Badge, { foreignKey: 'user_id' });

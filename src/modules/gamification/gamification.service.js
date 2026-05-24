@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const User = require('../users/user.model');
 const Badge = require('./badge.model');
 
@@ -59,6 +60,7 @@ const awardXP = async (userId, amount, reason) => {
   // Auto award badge if leveled up
   if (leveledUp) {
     await Badge.create({
+      id: uuidv4(),
       user_id: userId,
       badge_name: `Level ${newLevel} Achieved`,
       badge_type: 'special',
@@ -87,7 +89,7 @@ const getBadges = async (userId) => {
 // Get streak
 const getStreak = async (userId) => {
   const user = await User.findByPk(userId, {
-    attributes: ['streak_days', 'last_active'],
+    attributes: ['id', 'streak_days', 'last_active'],
   });
   if (!user) throw new Error('User not found');
 
@@ -107,6 +109,7 @@ const getStreak = async (userId) => {
       // Award streak badge at 7 days
       if (streak === 7) {
         await Badge.create({
+          id: uuidv4(),
           user_id: userId,
           badge_name: '7-Day Streak',
           badge_type: 'streak',
