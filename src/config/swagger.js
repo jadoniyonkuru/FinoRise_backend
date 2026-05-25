@@ -47,9 +47,48 @@ const options = {
           properties: {
             id: { type: 'string', format: 'uuid' },
             badge_name: { type: 'string' },
-            badge_type: { type: 'string', enum: ['streak', 'completion', 'simulation', 'special'] },
+            badge_type: {
+              type: 'string',
+              enum: ['streak', 'completion', 'simulation', 'special'],
+            },
             badge_icon: { type: 'string' },
             earned_at: { type: 'string', format: 'date-time' },
+          },
+        },
+        Reward: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            title: { type: 'string' },
+            description: { type: 'string' },
+            reward_type: {
+              type: 'string',
+              enum: ['airtime', 'discount', 'voucher', 'partner_offer'],
+            },
+            xp_cost: { type: 'integer' },
+            quantity: { type: 'integer', nullable: true },
+            is_active: { type: 'boolean' },
+            valid_until: { type: 'string', format: 'date-time', nullable: true },
+            created_at: { type: 'string', format: 'date-time' },
+            updated_at: { type: 'string', format: 'date-time' },
+          },
+        },
+        Redemption: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            user_id: { type: 'string', format: 'uuid' },
+            reward_id: { type: 'string', format: 'uuid' },
+            redemption_code: {
+              type: 'string',
+              example: 'FNR-1718000000000-AB3X9Z',
+            },
+            xp_spent: { type: 'integer' },
+            status: {
+              type: 'string',
+              enum: ['pending', 'confirmed', 'used', 'expired'],
+            },
+            created_at: { type: 'string', format: 'date-time' },
           },
         },
       },
@@ -60,6 +99,7 @@ const options = {
     './src/modules/auth/auth.routes.js',
     './src/modules/gamification/gamification.routes.js',
     './src/modules/learning/module.routes.js',
+    './src/modules/rewards/reward.routes.js',
   ],
 };
 
