@@ -26,5 +26,6 @@ app.use('/api/users', authRoutes);
 app.use('/api/gamification', gamificationRoutes);
 app.use('/api/modules', require('./modules/learning/module.routes'));
 app.use('/api/admin', adminRoutes);
+app.use('/api/rewards', require('./modules/rewards/reward.routes'));
 
 module.exports = app;
