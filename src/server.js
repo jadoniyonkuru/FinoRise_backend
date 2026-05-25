@@ -17,6 +17,7 @@ const start = async () => {
 
     app.listen(PORT, () => {
       console.log(`FinoRise server running on port ${PORT}`);
+      console.log(`API Docs: http://localhost:${PORT}/api-docs`);
     });
   } catch (err) {
     console.error('Failed to start:', err.message);

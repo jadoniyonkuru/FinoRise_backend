@@ -87,7 +87,7 @@ const getBadges = async (userId) => {
 // Get streak
 const getStreak = async (userId) => {
   const user = await User.findByPk(userId, {
-    attributes: ['streak_days', 'last_active'],
+    attributes: ['id', 'streak_days', 'last_active'],
   });
   if (!user) throw new Error('User not found');
 
