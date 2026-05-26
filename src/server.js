@@ -4,7 +4,8 @@ const sequelize = require('./config/database');
 
 require('./modules/users/user.model');
 require('./modules/gamification/badge.model');
-
+require('./modules/simulations/simulation.model');
+require('./modules/simulations/simulationSession.model');
 const PORT = process.env.PORT || 5000;
 
 const start = async () => {

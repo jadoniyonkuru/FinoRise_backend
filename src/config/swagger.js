@@ -91,6 +91,57 @@ const options = {
             created_at: { type: 'string', format: 'date-time' },
           },
         },
+        BehaviorEvent: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            user_id: { type: 'string', format: 'uuid' },
+            event_type: {
+              type: 'string',
+              enum: [
+                'simulation_decision',
+                'module_completed',
+                'reward_redeemed',
+                'streak_achieved',
+              ],
+            },
+            category: {
+              type: 'string',
+              enum: [
+                'budgeting',
+                'loan',
+                'emergency',
+                'debt',
+                'investing',
+                'general',
+              ],
+            },
+            is_correct: { type: 'boolean', nullable: true },
+            difficulty: { type: 'string', nullable: true },
+            meta: { type: 'object' },
+            created_at: { type: 'string', format: 'date-time' },
+          },
+        },
+        Insight: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            user_id: { type: 'string', format: 'uuid' },
+            insight_text: { type: 'string' },
+            insight_type: {
+              type: 'string',
+              enum: [
+                'spending',
+                'risk',
+                'consistency',
+                'decision_pattern',
+                'improvement',
+              ],
+            },
+            is_read: { type: 'boolean' },
+            created_at: { type: 'string', format: 'date-time' },
+          },
+        },
       },
     },
     security: [{ bearerAuth: [] }],
@@ -100,6 +151,7 @@ const options = {
     './src/modules/gamification/gamification.routes.js',
     './src/modules/learning/module.routes.js',
     './src/modules/rewards/reward.routes.js',
+    './src/modules/behavioral/behavior.routes.js',
   ],
 };
 
