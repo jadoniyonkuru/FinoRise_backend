@@ -1,6 +1,7 @@
 const Simulation = require('./simulation.model');
 const SimulationSession = require('./simulationSession.model');
 const User = require('../users/user.model');
+const behaviorService = require('../behavioral/behavior.service');
 
 // Get all published simulations
 const getAllSimulations = async () => {
@@ -67,6 +68,14 @@ const submitDecision = async (userId, simulationId, decision) => {
   // Award XP to user
   const user = await User.findByPk(userId);
   await user.update({ xp_total: user.xp_total + xp_awarded });
+
+  // Log behavior event for analytics
+  await behaviorService.logBehaviorEvent(userId, 'simulation_decision', {
+    category: simulation.category,
+    difficulty: simulation.difficulty,
+    is_correct,
+    meta: { simulation_id: simulationId, decision },
+  });
 
   return {
     is_correct,
