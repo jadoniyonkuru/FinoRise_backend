@@ -8,6 +8,7 @@ const swaggerSpec = require('./config/swagger');
 const authRoutes = require('./modules/auth/auth.routes');
 const gamificationRoutes = require('./modules/gamification/gamification.routes');
 const adminRoutes = require('./modules/admin/admin.routes');
+const simulationRoutes = require('./modules/simulations/simulation.routes');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/users', authRoutes);
 app.use('/api/gamification', gamificationRoutes);
 app.use('/api/modules', require('./modules/learning/module.routes'));
 app.use('/api/admin', adminRoutes);
+app.use('/api/simulations', simulationRoutes);
 app.use('/api/rewards', require('./modules/rewards/reward.routes'));
 
 module.exports = app;
