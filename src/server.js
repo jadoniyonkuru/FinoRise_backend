@@ -1,7 +1,13 @@
 require('dotenv').config();
 const app = require('./app');
 const sequelize = require('./config/database');
-
+// ── Simulations ───────────────────────────────
+require('./modules/simulations/simulation.model');
+require('./modules/simulations/simulationSession.model');
+require('./modules/simulations/simStep.model');
+require('./modules/simulations/simChoice.model');
+require('./modules/simulations/simulationAttempt.model');
+require('./modules/simulations/simAttemptStep.model');
 // ── User & Auth 
 require('./modules/users/user.model');
 
