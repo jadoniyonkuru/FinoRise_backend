@@ -10,7 +10,7 @@ const gamificationRoutes = require('./modules/gamification/gamification.routes')
 const adminRoutes = require('./modules/admin/admin.routes');
 const simulationRoutes = require('./modules/simulations/simulation.routes');
 const behavioralRoutes = require('./modules/behavioral/behavior.routes');
-
+const notificationsRoutes = require('./modules/notifications/notifications.routes');
 const app = express();
 
 app.use(helmet());
@@ -31,5 +31,5 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/simulations', simulationRoutes);
 app.use('/api/rewards', require('./modules/rewards/reward.routes'));
 app.use('/api/behavioral', behavioralRoutes);
-
+app.use('/api/notifications', notificationsRoutes);
 module.exports = app;
