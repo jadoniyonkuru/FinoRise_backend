@@ -7,7 +7,6 @@ require('./modules/users/user.model');
 
 // ── Gamification ─────────────────────────────
 require('./modules/gamification/badge.model');
-require('./modules/gamification/xpTransaction.model');
 
 // ── Learning Modules ──────────────────────────
 // (built by partner)
@@ -37,7 +36,7 @@ const start = async () => {
     await sequelize.authenticate();
     console.log('✅ Database connected');
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('✅ Tables synced');
 
     app.listen(PORT, () => {
