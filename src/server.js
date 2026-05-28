@@ -1,7 +1,7 @@
 require('dotenv').config();
 const app = require('./app');
 const sequelize = require('./config/database');
-
+require('./modules/gamification/xpTransaction.model');
 require('./modules/users/user.model');
 require('./modules/gamification/badge.model');
 require('./modules/simulations/simulation.model');
@@ -13,7 +13,7 @@ const start = async () => {
     await sequelize.authenticate();
     console.log('Database connected');
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('Tables synced');
 
     app.listen(PORT, () => {
