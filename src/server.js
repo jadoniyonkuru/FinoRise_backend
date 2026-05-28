@@ -2,7 +2,6 @@ require('dotenv').config();
 const app = require('./app');
 const sequelize = require('./config/database');
 
-// ── User & Auth ──────────────────────────────
 require('./modules/users/user.model');
 
 // ── Gamification ─────────────────────────────
@@ -37,7 +36,7 @@ const start = async () => {
     console.log('✅ Database connected');
 
     await sequelize.sync();
-    console.log('✅ Tables synced');
+    console.log('Tables synced');
 
     app.listen(PORT, () => {
       console.log(`🚀 FinoRise server running on port ${PORT}`);
