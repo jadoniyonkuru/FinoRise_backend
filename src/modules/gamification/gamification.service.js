@@ -1,5 +1,6 @@
 const User = require('../users/user.model');
 const Badge = require('./badge.model');
+const XPTransaction = require('./xpTransaction.model');
 
 // XP levels config
 const LEVELS = [
@@ -15,7 +16,6 @@ const LEVELS = [
   { level: 10, minXP: 16000 },
 ];
 
-// Calculate level from XP
 const calculateLevel = (xp) => {
   let currentLevel = 1;
   for (const l of LEVELS) {
@@ -24,7 +24,6 @@ const calculateLevel = (xp) => {
   return currentLevel;
 };
 
-// Get user XP and level
 const getXP = async (userId) => {
   const user = await User.findByPk(userId, {
     attributes: ['id', 'xp_total', 'level', 'streak_days'],
@@ -42,7 +41,6 @@ const getXP = async (userId) => {
   };
 };
 
-// Award XP to user
 const awardXP = async (userId, amount, reason) => {
   const user = await User.findByPk(userId);
   if (!user) throw new Error('User not found');
@@ -56,7 +54,13 @@ const awardXP = async (userId, amount, reason) => {
     level: newLevel,
   });
 
-  // Auto award badge if leveled up
+  await XPTransaction.create({
+    user_id: userId,
+    amount,
+    source_type: 'simulation',
+    description: reason || 'XP awarded',
+  });
+
   if (leveledUp) {
     await Badge.create({
       user_id: userId,
@@ -75,7 +79,6 @@ const awardXP = async (userId, amount, reason) => {
   };
 };
 
-// Get user badges
 const getBadges = async (userId) => {
   const badges = await Badge.findAll({
     where: { user_id: userId },
@@ -84,7 +87,6 @@ const getBadges = async (userId) => {
   return badges;
 };
 
-// Get streak
 const getStreak = async (userId) => {
   const user = await User.findByPk(userId, {
     attributes: ['id', 'streak_days', 'last_active'],
@@ -100,11 +102,9 @@ const getStreak = async (userId) => {
       (today - lastActive) / (1000 * 60 * 60 * 24)
     );
     if (diffDays === 1) {
-      // Consecutive day — increase streak
       streak += 1;
       await user.update({ streak_days: streak, last_active: today });
 
-      // Award streak badge at 7 days
       if (streak === 7) {
         await Badge.create({
           user_id: userId,
@@ -114,7 +114,6 @@ const getStreak = async (userId) => {
         });
       }
     } else if (diffDays > 1) {
-      // Missed a day — reset streak
       streak = 1;
       await user.update({ streak_days: 1, last_active: today });
     }
@@ -125,7 +124,6 @@ const getStreak = async (userId) => {
   return { streak_days: streak, last_active: today };
 };
 
-// Get leaderboard
 const getLeaderboard = async () => {
   const users = await User.findAll({
     attributes: ['id', 'full_name', 'xp_total', 'level', 'streak_days'],
