@@ -32,4 +32,12 @@ app.use('/api/simulations', simulationRoutes);
 app.use('/api/rewards', require('./modules/rewards/reward.routes'));
 app.use('/api/behavioral', behavioralRoutes);
 app.use('/api/notifications', notificationsRoutes);
+
+app.use((err, req, res, next) => {
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ message: 'Invalid JSON in request body' });
+  }
+  res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
+});
+
 module.exports = app;

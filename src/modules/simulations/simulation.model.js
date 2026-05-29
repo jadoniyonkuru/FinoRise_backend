@@ -29,15 +29,24 @@ const Simulation = sequelize.define('Simulation', {
   },
   choices: {
     type: DataTypes.JSONB,
-    allowNull: false,
+    allowNull: true,
+    defaultValue: [],
   },
   correct_choice: {
     type: DataTypes.STRING(1),
-    allowNull: false,
+    allowNull: true,
+    defaultValue: null,
   },
   feedback: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
+    defaultValue: '',
+  },
+  created_by: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    comment: 'Optional: user who created the simulation',
+    references: { model: 'users', key: 'id' },
   },
   is_published: {
     type: DataTypes.BOOLEAN,

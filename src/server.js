@@ -35,11 +35,12 @@ const start = async () => {
     await sequelize.authenticate();
     console.log('✅ Database connected');
 
-    await sequelize.sync();
-    console.log('Tables synced');
+    await sequelize.sync({ alter: { drop: false } });
+    console.log('Tables synced (alter applied)');
 
     app.listen(PORT, () => {
       console.log(`🚀 FinoRise server running on port ${PORT}`);
+      console.log(`📄 API Docs: http://localhost:${PORT}/api-docs`);
     });
   } catch (err) {
     console.error('❌ Failed to start:', err.message);
