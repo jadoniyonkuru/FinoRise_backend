@@ -142,6 +142,32 @@ const options = {
             created_at: { type: 'string', format: 'date-time' },
           },
         },
+        AiLog: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            user_id: { type: 'string', format: 'uuid' },
+            prompt: { type: 'string' },
+            response: { type: 'string' },
+            feature: {
+              type: 'string',
+              enum: ['qa', 'simulation_explanation', 'recommendations', 'learning_guidance'],
+            },
+            created_at: { type: 'string', format: 'date-time' },
+          },
+        },
+        AiReply: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                reply: { type: 'string', example: 'Start by tracking your expenses for one month...' },
+              },
+            },
+          },
+        },
       },
     },
     security: [{ bearerAuth: [] }],
@@ -152,6 +178,7 @@ const options = {
     './src/modules/learning/module.routes.js',
     './src/modules/rewards/reward.routes.js',
     './src/modules/behavioral/behavior.routes.js',
+    './src/modules/ai/ai.routes.js',
   ],
 };
 
