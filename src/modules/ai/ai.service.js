@@ -4,12 +4,18 @@ const Insight = require('../behavioral/insight.model');
 const User = require('../users/user.model');
 const AiLog = require('./aiLog.model');
 
-// Initialize Gemini model
-const model = new ChatGoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  model: 'gemini-1.5-flash',
-  temperature: 0.7,
-});
+// Lazy-initialized so missing key doesn't crash the server on startup
+let model = null;
+const getModel = () => {
+  if (!model) {
+    model = new ChatGoogleGenerativeAI({
+      apiKey: process.env.GEMINI_API_KEY,
+      model: 'gemini-1.5-flash',
+      temperature: 0.7,
+    });
+  }
+  return model;
+};
 
 // Base system prompt for all conversations
 const BASE_SYSTEM_PROMPT = `You are FinoRise AI, a friendly and knowledgeable financial literacy coach.
@@ -43,7 +49,7 @@ They are at level ${user.level} with ${user.xp_total} XP on the platform.
 ${insightSummary}
 Use this context to personalize your response where relevant.`;
 
-  const response = await model.invoke([
+  const response = await getModel().invoke([
     new SystemMessage(systemPrompt),
     new HumanMessage(message),
   ]);
@@ -76,7 +82,7 @@ Simulation feedback: ${feedback}
 
 Please explain why the correct answer is right in simple terms, and give the user one practical tip they can apply in real life related to ${category}.`;
 
-  const response = await model.invoke([
+  const response = await getModel().invoke([
     new SystemMessage(BASE_SYSTEM_PROMPT),
     new HumanMessage(prompt),
   ]);
@@ -120,7 +126,7 @@ ${insightTexts}
 Give 3 specific, actionable recommendations to help them improve their financial decision-making. 
 Format each recommendation with a number and keep each one to 2 sentences max.`;
 
-  const response = await model.invoke([
+  const response = await getModel().invoke([
     new SystemMessage(BASE_SYSTEM_PROMPT),
     new HumanMessage(prompt),
   ]);
@@ -148,7 +154,7 @@ const getLearningGuidance = async (userId) => {
 Their current stats: Level ${user.level}, ${user.xp_total} XP, ${user.streak_days} day streak.
 Suggest what financial topics they should focus on next based on their level, and motivate them to keep their streak going.`;
 
-  const response = await model.invoke([
+  const response = await getModel().invoke([
     new SystemMessage(BASE_SYSTEM_PROMPT),
     new HumanMessage(prompt),
   ]);
