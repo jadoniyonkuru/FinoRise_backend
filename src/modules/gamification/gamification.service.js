@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const User = require('../users/user.model');
 const Badge = require('./badge.model');
 const XPTransaction = require('./xpTransaction.model');
@@ -63,6 +64,7 @@ const awardXP = async (userId, amount, reason) => {
 
   if (leveledUp) {
     await Badge.create({
+      id: uuidv4(),
       user_id: userId,
       badge_name: `Level ${newLevel} Achieved`,
       badge_type: 'special',
@@ -107,6 +109,7 @@ const getStreak = async (userId) => {
 
       if (streak === 7) {
         await Badge.create({
+          id: uuidv4(),
           user_id: userId,
           badge_name: '7-Day Streak',
           badge_type: 'streak',
