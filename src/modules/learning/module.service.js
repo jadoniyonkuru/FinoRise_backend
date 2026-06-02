@@ -14,7 +14,8 @@ const getModuleById = async (id) => {
 };
 
 const createModule = async (data) => {
-  return await Module.create(data);
+  const count = await Module.count();
+  return await Module.create({ ...data, order_index: count + 1 });
 };
 
 const updateModule = async (id, data) => {

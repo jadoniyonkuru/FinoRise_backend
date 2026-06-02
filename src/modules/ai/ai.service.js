@@ -1,4 +1,4 @@
-const { ChatGoogleGenerativeAI } = require('@langchain/google-genai');
+const { ChatGroq } = require('@langchain/groq');
 const { HumanMessage, SystemMessage } = require('@langchain/core/messages');
 const Insight = require('../behavioral/insight.model');
 const User = require('../users/user.model');
@@ -8,9 +8,9 @@ const AiLog = require('./aiLog.model');
 let model = null;
 const getModel = () => {
   if (!model) {
-    model = new ChatGoogleGenerativeAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      model: 'gemini-1.5-flash',
+    model = new ChatGroq({
+      apiKey: process.env.GROQ_API_KEY,
+      model: 'llama-3.1-8b-instant',
       temperature: 0.7,
     });
   }
