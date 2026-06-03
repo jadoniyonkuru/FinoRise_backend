@@ -89,4 +89,16 @@ const updateProfile = async (userId, data) => {
   };
 };
 
-module.exports = { register, login, getProfile, updateProfile };
+const changePassword = async (userId, currentPassword, newPassword) => {
+  const user = await User.findByPk(userId);
+  if (!user) throw new Error('User not found');
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+  if (!isMatch) throw new Error('Current password is incorrect');
+
+  const password_hash = await bcrypt.hash(newPassword, 10);
+  await user.update({ password_hash });
+  return { message: 'Password changed successfully' };
+};
+
+module.exports = { register, login, getProfile, updateProfile, changePassword };

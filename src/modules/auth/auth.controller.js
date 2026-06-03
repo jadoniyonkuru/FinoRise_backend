@@ -48,4 +48,17 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getProfile, updateProfile };
+const changePassword = async (req, res) => {
+  try {
+    const { current_password, new_password } = req.body;
+    if (!current_password || !new_password) {
+      return res.status(400).json({ message: 'current_password and new_password are required' });
+    }
+    const result = await authService.changePassword(req.user.id, current_password, new_password);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports = { register, login, getProfile, updateProfile, changePassword };

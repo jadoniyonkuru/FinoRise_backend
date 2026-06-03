@@ -179,6 +179,9 @@ const options = {
     './src/modules/rewards/reward.routes.js',
     './src/modules/behavioral/behavior.routes.js',
     './src/modules/ai/ai.routes.js',
+    './src/modules/partner/partner.routes.js',
+    './src/modules/analytics/analytics.routes.js',
+    './src/modules/simulations/simulation.routes.js',
   ],
 };
 

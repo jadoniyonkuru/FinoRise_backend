@@ -27,4 +27,12 @@ const adminOnly = (req, res, next) => {
   next();
 };
 
-module.exports = { protect, adminOnly };
+// Partner only middleware
+const partnerOnly = (req, res, next) => {
+  if (req.user.role !== 'partner') {
+    return res.status(403).json({ message: 'Access denied, partners only' });
+  }
+  next();
+};
+
+module.exports = { protect, adminOnly, partnerOnly };

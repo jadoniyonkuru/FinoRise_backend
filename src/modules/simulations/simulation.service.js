@@ -220,10 +220,31 @@ const getHistory = async (userId) => {
   return attempts;
 };
 
+const createSimulation = async (data, userId) => {
+  return Simulation.create({ ...data, created_by: userId });
+};
+
+const updateSimulation = async (simulationId, data) => {
+  const simulation = await Simulation.findByPk(simulationId);
+  if (!simulation) throw new Error('Simulation not found');
+  await simulation.update(data);
+  return simulation;
+};
+
+const deleteSimulation = async (simulationId) => {
+  const simulation = await Simulation.findByPk(simulationId);
+  if (!simulation) throw new Error('Simulation not found');
+  await simulation.destroy();
+  return { message: 'Simulation deleted' };
+};
+
 module.exports = {
   getAllSimulations,
   getSimulationById,
   startSimulation,
   submitChoice,
   getHistory,
+  createSimulation,
+  updateSimulation,
+  deleteSimulation,
 };
