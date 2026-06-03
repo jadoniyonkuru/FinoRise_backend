@@ -69,10 +69,40 @@ const getHistory = async (req, res) => {
   }
 };
 
+const createSimulation = async (req, res) => {
+  try {
+    const simulation = await simulationService.createSimulation(req.body, req.user.id);
+    res.status(201).json({ success: true, data: simulation });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+const updateSimulation = async (req, res) => {
+  try {
+    const simulation = await simulationService.updateSimulation(req.params.id, req.body);
+    res.status(200).json({ success: true, data: simulation });
+  } catch (err) {
+    res.status(404).json({ success: false, message: err.message });
+  }
+};
+
+const deleteSimulation = async (req, res) => {
+  try {
+    const result = await simulationService.deleteSimulation(req.params.id);
+    res.status(200).json({ success: true, ...result });
+  } catch (err) {
+    res.status(404).json({ success: false, message: err.message });
+  }
+};
+
 module.exports = {
   getAllSimulations,
   getSimulationById,
   startSimulation,
   submitChoice,
   getHistory,
+  createSimulation,
+  updateSimulation,
+  deleteSimulation,
 };

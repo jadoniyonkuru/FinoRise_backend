@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/jadoniyonkuru/FinoRise_backend#readme",
   "dependencies": {
+    "@langchain/google-genai": "^2.1.31",
+    "@langchain/groq": "^1.2.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

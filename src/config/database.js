@@ -1,11 +1,5 @@
 const { Sequelize } = require('sequelize');
 
-/**
- * Database Configuration
- * ----------------------
- * In production (Render) we use DATABASE_URL env variable.
- * In development we use individual DB credentials from .env
- */
 const sequelize = process.env.DATABASE_URL
   ? new Sequelize(process.env.DATABASE_URL, {
       dialect: 'postgres',
@@ -13,7 +7,7 @@ const sequelize = process.env.DATABASE_URL
       dialectOptions: {
         ssl: {
           require: true,
-          rejectUnauthorized: false, // required for Render PostgreSQL
+          rejectUnauthorized: false,
         },
       },
     })

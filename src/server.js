@@ -8,7 +8,12 @@ require('./modules/users/user.model');
 require('./modules/gamification/badge.model');
 
 // ── Learning Modules ──────────────────────────
-// (built by partner)
+require('./modules/learning/lesson.model');
+require('./modules/learning/quiz.model');
+require('./modules/learning/moduleProgress.model');
+
+// ── AI ─────────────────────────────────────────
+require('./modules/ai/aiLog.model');
 
 // ── Simulations ───────────────────────────────
 require('./modules/simulations/simulation.model');
