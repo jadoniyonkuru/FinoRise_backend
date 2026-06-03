@@ -43,7 +43,7 @@ const start = async () => {
       console.log(`📄 API Docs: http://localhost:${PORT}/api-docs`);
     });
   } catch (err) {
-    console.error('❌ Failed to start:', err.message);
+    console.error('❌ Failed to start:', err.message || err);
     process.exit(1);
   }
 };
