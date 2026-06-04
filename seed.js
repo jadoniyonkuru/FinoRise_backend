@@ -39,6 +39,8 @@ async function seed() {
       difficulty: 'beginner',
       xp_reward: 200,
       is_published: true,
+      order_index: 1,
+      created_by: admin.id,
     },
     {
       title: 'Smart Debt Management',
@@ -47,6 +49,8 @@ async function seed() {
       difficulty: 'intermediate',
       xp_reward: 300,
       is_published: true,
+      order_index: 2,
+      created_by: admin.id,
     },
     {
       title: 'Introduction to Investing',
@@ -55,6 +59,8 @@ async function seed() {
       difficulty: 'intermediate',
       xp_reward: 350,
       is_published: true,
+      order_index: 3,
+      created_by: admin.id,
     },
   ];
 
