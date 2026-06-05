@@ -147,4 +147,7 @@ router.put('/profile', protect, authController.updateProfile);
  */
 router.put('/password', protect, authController.changePassword);
 
+router.get('/accept-invite/validate', authController.validateInvite);
+router.post('/accept-invite', authController.acceptInvite);
+
 module.exports = router;

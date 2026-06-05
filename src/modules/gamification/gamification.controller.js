@@ -47,4 +47,13 @@ const getLeaderboard = async (req, res) => {
   }
 };
 
-module.exports = { getXP, awardXP, getBadges, getStreak, getLeaderboard };
+const recordStreak = async (req, res) => {
+  try {
+    const data = await gamificationService.recordStreak(req.user.id);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports = { getXP, awardXP, getBadges, getStreak, recordStreak, getLeaderboard };

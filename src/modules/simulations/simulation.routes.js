@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const simulationController = require('./simulation.controller');
-const { protect, adminOnly } = require('../auth/auth.middleware');
+const { protect, adminOnly, simulationManagerOrAdmin } = require('../auth/auth.middleware');
 
 /**
  * Simulation Routes
@@ -14,10 +14,10 @@ const { protect, adminOnly } = require('../auth/auth.middleware');
  */
 router.get('/', protect, simulationController.getAllSimulations);
 router.get('/history', protect, simulationController.getHistory);
-router.post('/', protect, adminOnly, simulationController.createSimulation);
+router.post('/', protect, simulationManagerOrAdmin, simulationController.createSimulation);
 router.get('/:id', protect, simulationController.getSimulationById);
-router.put('/:id', protect, adminOnly, simulationController.updateSimulation);
-router.delete('/:id', protect, adminOnly, simulationController.deleteSimulation);
+router.put('/:id', protect, simulationManagerOrAdmin, simulationController.updateSimulation);
+router.delete('/:id', protect, simulationManagerOrAdmin, simulationController.deleteSimulation);
 router.post('/:id/start', protect, simulationController.startSimulation);
 router.post('/submit', protect, simulationController.submitChoice);
 

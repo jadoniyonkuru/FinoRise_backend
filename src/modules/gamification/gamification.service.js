@@ -127,6 +127,48 @@ const getStreak = async (userId) => {
   return { streak_days: streak, last_active: today };
 };
 
+const recordStreak = async (userId) => {
+  const user = await User.findByPk(userId);
+  if (!user) throw new Error('User not found');
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const lastActive = user.last_active ? new Date(user.last_active) : null;
+  let streak = user.streak_days;
+
+  if (lastActive) {
+    const last = new Date(lastActive);
+    last.setHours(0, 0, 0, 0);
+    const diffDays = Math.round((today - last) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+      // Already active today — keep streak unchanged
+      return { streak_days: streak, last_activity_date: today.toISOString().split('T')[0] };
+    } else if (diffDays === 1) {
+      streak += 1;
+    } else {
+      streak = 1;
+    }
+  } else {
+    streak = 1;
+  }
+
+  await user.update({ streak_days: streak, last_active: new Date() });
+
+  if (streak === 7 || streak === 30) {
+    await Badge.create({
+      id: uuidv4(),
+      user_id: userId,
+      badge_name: `${streak}-Day Streak`,
+      badge_type: 'streak',
+      badge_icon: '🔥',
+    });
+  }
+
+  return { streak_days: streak, last_activity_date: today.toISOString().split('T')[0] };
+};
+
 const getLeaderboard = async () => {
   const users = await User.findAll({
     attributes: ['id', 'full_name', 'xp_total', 'level', 'streak_days'],
@@ -136,4 +178,4 @@ const getLeaderboard = async () => {
   return users;
 };
 
-module.exports = { getXP, awardXP, getBadges, getStreak, getLeaderboard };
+module.exports = { getXP, awardXP, getBadges, getStreak, recordStreak, getLeaderboard };

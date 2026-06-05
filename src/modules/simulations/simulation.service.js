@@ -13,12 +13,11 @@ const behaviorService = require('../behavioral/behavior.service');
  * Only published simulations are visible to learners.
  * Ordered by most recently created first.
  */
-const getAllSimulations = async () => {
-  const simulations = await Simulation.findAll({
-    where: { is_published: true },
-    order: [['created_at', 'DESC']],
-  });
-  return simulations;
+const STAFF_ROLES = ['admin', 'module_manager', 'simulation_manager', 'rewards_manager', 'analytics_viewer'];
+
+const getAllSimulations = async (role) => {
+  const where = STAFF_ROLES.includes(role) ? {} : { is_published: true };
+  return Simulation.findAll({ where, order: [['created_at', 'DESC']] });
 };
 
 /**
@@ -224,9 +223,12 @@ const createSimulation = async (data, userId) => {
   return Simulation.create({ ...data, created_by: userId });
 };
 
-const updateSimulation = async (simulationId, data) => {
+const updateSimulation = async (simulationId, data, role) => {
   const simulation = await Simulation.findByPk(simulationId);
   if (!simulation) throw new Error('Simulation not found');
+  if (data.is_published === true && role !== 'admin') {
+    throw Object.assign(new Error('Only admin can publish simulations'), { statusCode: 403 });
+  }
   await simulation.update(data);
   return simulation;
 };

@@ -1,16 +1,14 @@
 const User = require('../users/user.model');
 const Badge = require('../gamification/badge.model');
+const authService = require('../auth/auth.service');
 
-// Get all users
 const getAllUsers = async () => {
-  const users = await User.findAll({
+  return User.findAll({
     attributes: { exclude: ['password_hash'] },
     order: [['created_at', 'DESC']],
   });
-  return users;
 };
 
-// Delete a user
 const deleteUser = async (userId) => {
   const user = await User.findByPk(userId);
   if (!user) throw new Error('User not found');
@@ -18,7 +16,29 @@ const deleteUser = async (userId) => {
   return { message: 'User deleted successfully' };
 };
 
-// Get platform analytics
+const updateUser = async (userId, { full_name, email, role, account_status }) => {
+  const user = await User.findByPk(userId);
+  if (!user) throw new Error('User not found');
+  const updates = {};
+  if (full_name !== undefined) updates.full_name = full_name;
+  if (email !== undefined) updates.email = email;
+  if (role !== undefined) updates.role = role;
+  if (account_status !== undefined) updates.account_status = account_status;
+  await user.update(updates);
+  const { password_hash, ...safe } = user.get({ plain: true });
+  return { user: safe };
+};
+
+const inviteUser = async ({ full_name, email, role }, req) => {
+  const frontendUrl = req.headers.origin || process.env.FRONTEND_URL;
+  return authService.inviteUser({ full_name, email, role }, frontendUrl);
+};
+
+const resendInvite = async (userId, req) => {
+  const frontendUrl = req.headers.origin || process.env.FRONTEND_URL;
+  return authService.resendInvite(userId, frontendUrl);
+};
+
 const getAnalytics = async () => {
   const totalUsers = await User.count();
   const totalAdmins = await User.count({ where: { role: 'admin' } });
@@ -31,13 +51,7 @@ const getAnalytics = async () => {
     limit: 5,
   });
 
-  return {
-    total_users: totalUsers,
-    total_admins: totalAdmins,
-    total_learners: totalLearners,
-    total_badges_awarded: totalBadges,
-    top_users: topUsers,
-  };
+  return { total_users: totalUsers, total_admins: totalAdmins, total_learners: totalLearners, total_badges_awarded: totalBadges, top_users: topUsers };
 };
 
-module.exports = { getAllUsers, deleteUser, getAnalytics };
+module.exports = { getAllUsers, deleteUser, updateUser, inviteUser, resendInvite, getAnalytics };

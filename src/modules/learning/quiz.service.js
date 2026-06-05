@@ -1,5 +1,6 @@
 const QuizQuestion = require('./quiz.model');
 const Module = require('./module.model');
+const User = require('../users/user.model');
 const behaviorService = require('../behavioral/behavior.service');
 const { awardXP } = require('../gamification/gamification.service');
 
@@ -8,14 +9,12 @@ const getQuiz = async (moduleId) => {
   if (!mod) throw new Error('Module not found');
   const questions = await QuizQuestion.findAll({
     where: { module_id: moduleId },
-    // Strip correct_answer so learner can't see it
     attributes: ['id', 'question', 'options', 'xp_reward'],
   });
   return { module_id: moduleId, questions };
 };
 
 const submitQuiz = async (userId, moduleId, answers) => {
-  // answers: [{ question_id, answer }]
   const mod = await Module.findByPk(moduleId);
   if (!mod) throw new Error('Module not found');
 
@@ -31,21 +30,23 @@ const submitQuiz = async (userId, moduleId, answers) => {
       correct++;
       xpEarned += q.xp_reward;
     }
-    return {
-      question_id: q.id,
-      correct: isCorrect,
-      correct_answer: q.correct_answer,
-    };
+    return { question_id: q.id, correct: isCorrect, correct_answer: q.correct_answer };
   });
 
   const score = Math.round((correct / questions.length) * 100);
 
-  // Award XP to user (also recalculates level)
   if (xpEarned > 0) {
     await awardXP(userId, xpEarned, `Quiz: ${mod.title}`);
   }
 
-  // Log behavior event
+  // Update rolling average_quiz_score on the user
+  const user = await User.findByPk(userId);
+  if (user) {
+    const prev = user.average_quiz_score;
+    const newAvg = prev === null ? score : Math.round((prev + score) / 2);
+    await user.update({ average_quiz_score: newAvg });
+  }
+
   await behaviorService.logBehaviorEvent(userId, 'module_completed', {
     category: mod.category || 'general',
     difficulty: mod.difficulty,

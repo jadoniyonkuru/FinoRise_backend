@@ -15,7 +15,7 @@ const getLearnerAnalytics = async (userId) => {
     badges,
   ] = await Promise.all([
     User.findByPk(userId, {
-      attributes: ['id', 'full_name', 'xp_total', 'level', 'streak_days', 'last_active'],
+      attributes: ['id', 'full_name', 'xp_total', 'level', 'streak_days', 'last_active', 'average_quiz_score'],
     }),
     ModuleProgress.findAll({
       where: { user_id: userId },
@@ -69,7 +69,7 @@ const getLearnerAnalytics = async (userId) => {
       completed: completedCount,
       total_available: totalModules,
       completion_rate: totalModules > 0 ? Math.round((completedCount / totalModules) * 100) : 0,
-      average_quiz_score: avgScore,
+      average_quiz_score: user.average_quiz_score,
       category_breakdown: categoryBreakdown,
       recent_completions: completedModules.slice(0, 5),
     },

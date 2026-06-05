@@ -91,6 +91,7 @@ router.get('/badges', protect, gamificationController.getBadges);
  *         description: Unauthorized
  */
 router.get('/streak', protect, gamificationController.getStreak);
+router.post('/streak/record', protect, gamificationController.recordStreak);
 
 /**
  * @swagger

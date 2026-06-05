@@ -23,11 +23,20 @@ const User = sequelize.define('User', {
   },
   password_hash: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
   },
   role: {
-    type: DataTypes.ENUM('learner', 'admin', 'partner'),
+    type: DataTypes.ENUM('learner', 'admin', 'partner', 'module_manager', 'simulation_manager', 'rewards_manager', 'analytics_viewer'),
     defaultValue: 'learner',
+  },
+  account_status: {
+    type: DataTypes.ENUM('active', 'disabled', 'pending_invite'),
+    defaultValue: 'active',
+  },
+  average_quiz_score: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: null,
   },
   xp_total: {
     type: DataTypes.INTEGER,

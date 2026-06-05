@@ -6,7 +6,7 @@ const simulationService = require('./simulation.service');
  */
 const getAllSimulations = async (req, res) => {
   try {
-    const simulations = await simulationService.getAllSimulations();
+    const simulations = await simulationService.getAllSimulations(req.user.role);
     res.status(200).json({ simulations });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -80,10 +80,10 @@ const createSimulation = async (req, res) => {
 
 const updateSimulation = async (req, res) => {
   try {
-    const simulation = await simulationService.updateSimulation(req.params.id, req.body);
+    const simulation = await simulationService.updateSimulation(req.params.id, req.body, req.user.role);
     res.status(200).json({ success: true, data: simulation });
   } catch (err) {
-    res.status(404).json({ success: false, message: err.message });
+    res.status(err.statusCode || 404).json({ success: false, message: err.message });
   }
 };
 

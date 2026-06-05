@@ -4,7 +4,7 @@ const moduleController = require('./module.controller');
 const lessonController = require('./lesson.controller');
 const quizController = require('./quiz.controller');
 const progressController = require('./moduleProgress.controller');
-const { protect, adminOnly } = require('../auth/auth.middleware');
+const { protect, adminOnly, moduleManagerOrAdmin } = require('../auth/auth.middleware');
 
 /**
  * @swagger
@@ -99,7 +99,7 @@ router.get('/:id', protect, moduleController.getModuleById);
  *       403:
  *         description: Admin access required
  */
-router.post('/', protect, adminOnly, moduleController.createModule);
+router.post('/', protect, moduleManagerOrAdmin, moduleController.createModule);
 
 /**
  * @swagger
@@ -134,7 +134,7 @@ router.post('/', protect, adminOnly, moduleController.createModule);
  *       404:
  *         description: Module not found
  */
-router.put('/:id', protect, adminOnly, moduleController.updateModule);
+router.put('/:id', protect, moduleManagerOrAdmin, moduleController.updateModule);
 
 /**
  * @swagger
@@ -156,7 +156,7 @@ router.put('/:id', protect, adminOnly, moduleController.updateModule);
  *       404:
  *         description: Module not found
  */
-router.delete('/:id', protect, adminOnly, moduleController.deleteModule);
+router.delete('/:id', protect, moduleManagerOrAdmin, moduleController.deleteModule);
 
 // ── Module Complete ───────────────────────────────────────────────────────────
 

@@ -2,7 +2,7 @@ const moduleService = require('./module.service');
 
 const getAllModules = async (req, res) => {
   try {
-    const modules = await moduleService.getAllModules();
+    const modules = await moduleService.getAllModules(req.user.role);
     res.status(200).json({ success: true, data: modules });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -32,10 +32,10 @@ const createModule = async (req, res) => {
 
 const updateModule = async (req, res) => {
   try {
-    const module = await moduleService.updateModule(req.params.id, req.body);
+    const module = await moduleService.updateModule(req.params.id, req.body, req.user.role);
     res.status(200).json({ success: true, data: module });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    res.status(err.statusCode || 400).json({ success: false, message: err.message });
   }
 };
 
